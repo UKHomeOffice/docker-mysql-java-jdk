@@ -1,6 +1,7 @@
-# Docker MySQL Java Container
+# Docker MySQL Java JDK Container
 
-Docker MySQL Container that also includes Open Java 8 *JRE* install.
+Docker MySQL Container that also includes Open Java 8 *JDK* install.
+It will start mysql in the background then run any parameters provided. 
 
 ## Getting Started
 
@@ -16,28 +17,28 @@ In order to run this container you'll need docker installed.
 
 ### Usage
 
-This is intended as a base image that would extended mysql so Java code maybe run along with mysql tools installed e.g.
-
+The example below, starts the mysql instance then runs a Java (gradle) build:
 
 ```
-FROM quay.io/ukhomeofficedigital/mysql-java:v0.1.2
-
-# Customisations to allow for schema updates using liquidbase Java file
-# =====================================================================
-
-ENV TERM dumb
-
-COPY docker-entrypoint.sh /
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
+docker run -i --rm=true \
+        -v ${BUILD_HOME_DIR}:/code \
+        -e BUILD_NUMBER=${BUILD_NUMBER} \
+        -e MYSQL_ROOT_PASSWORD=password \
+        -v ${GRADLE_CACHE}:/root/.gradle/caches \
+        quay.io/ukhomeofficedigital/mysql-java-jdk:v0.1.1 \
+        ./gradlew -Dspring.datasource.username=root \
+            -Dspring.datasource.password=${MYSQL_ROOT_PASSWORD} \
+            -Dspring.datasource.url=jdbc:mysql://127.0.0.1/mydb \
+            -Dliquibase.url=jdbc:mysql://127.0.0.1/mydb \
+            -Dliquibase.user=root \
+            -Dliquibase.password=${MYSQL_ROOT_PASSWORD} \
+            "$@"
+    exit 0
+fi
 ```
 
-It was created to run a simple bash mysql users script and then run a Java 
-[Liquidbase](http://www.liquibase.org/) schema install.
-
-It extends the mysql only repository and as such, most of the documentation is available here:
+It extends the mysql only repository and as such, additional relevant documentation is available here:
 [Docker MySQL](https://github.com/UKHomeOffice/docker-mysql/blob/v0.5.1/README.md)
-
  
 
 ## Contributing

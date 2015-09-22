@@ -17,3 +17,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk
 VOLUME ["/root/.gradle/caches"]
 VOLUME ["/code"]
 WORKDIR /code
+
+ADD run_mysql_and_some.sh /
+
+ENTRYPOINT ["/run_mysql_and_some.sh"]
