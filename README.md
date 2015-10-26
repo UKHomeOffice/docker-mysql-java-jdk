@@ -1,5 +1,7 @@
 # Docker MySQL Java JDK Container
 
+[![Build Status](https://travis-ci.org/UKHomeOffice/docker-mysql-java-jdk.svg?branch=master)](https://travis-ci.org/UKHomeOffice/docker-mysql-java-jdk)
+
 Docker MySQL Container that also includes Open Java 8 *JDK* install.
 It will start mysql in the background then run any parameters provided. 
 
